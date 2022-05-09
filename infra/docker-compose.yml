@@ -10,8 +10,6 @@ services:
     image: atuktanov/foodgram_front
     volumes:
       - ./frontend/:/app/result_build/
-    depends_on:
-      - db
   backend:
     image: atuktanov/foodgram_back
     restart: always
