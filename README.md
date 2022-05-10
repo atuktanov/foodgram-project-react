@@ -6,7 +6,7 @@
 список покупок. Список покупок дает возможность скачать список продуктов, необходимых для приготовления добавленных блюд.
 
 ### Стек технологий: 
-Python, Django REST Framework, PostgreSQL, Gunicorn, Nginx, Яндекс.Облако(Ubuntu 20.04), GitHub Actions, Docker
+Python, Django, Django REST Framework, PostgreSQL, Nginx, Gunicorn, Docker, GitHub Actions, Яндекс.Облако
 
 ### Запуск проекта на собственном сервере:
 На сервере должен быт установлен docker и docker-compose
@@ -29,7 +29,7 @@ SECRET_KEY=j#@2yv698sb@#x=pq4b!^=4ap1!$b7xgpgv3fbpc5@9017!5jx
 ```
 sudo docker-compose up -d
 ```
-Сделать миграции
+Применить миграции
 ```
 sudo docker-compose exec backend python manage.py migrate
 ```
