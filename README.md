@@ -1,4 +1,3 @@
-
 ![foodgram workflow](https://github.com/atuktanov/foodgram-project-react/workflows/foodgram_workflow/badge.svg)
 # Продуктовый помощник
 Проект запущен по адресу [http://atuktanov.ddns.net/](http://atuktanov.ddns.net/)
