@@ -4,7 +4,7 @@ from rest_framework import routers
 from .views import TagViewSet
 
 router = routers.DefaultRouter()
-router.register('tags/', TagViewSet)
+router.register('tags', TagViewSet)
 
 urlpatterns = (
     path('users/', include('users.urls')),
