@@ -3,9 +3,9 @@ from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
+from api.serializers import TagSerializer
 from ingredients.models import Ingredient
 from recipes.models import IngredientAmount, Recipe
-from api.serializers import TagSerializer
 from users.serializers import UserSerializer
 
 
