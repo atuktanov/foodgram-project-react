@@ -7,19 +7,15 @@ from django.db.models.query_utils import Q
 
 
 class User(AbstractUser):
-    email = models.EmailField(
-        'Email адрес', max_length=254, unique=True, blank=False, null=False)
+    email = models.EmailField('Email адрес', max_length=254, unique=True)
     username = models.CharField(
         'Юзернейм', max_length=150,
         validators=(RegexValidator(
             regex=r'^[\w.@+-]+$',
             message=('Поле может содержать только буквы латинского алфавита, '
-                     'цифры и символы _.@+-')),),
-        unique=True, blank=False, null=False)
-    first_name = models.CharField(
-        'Имя', max_length=150, blank=False, null=False)
-    last_name = models.CharField(
-        'Фамилия', max_length=150, blank=False, null=False)
+                     'цифры и символы _.@+-')),), unique=True)
+    first_name = models.CharField('Имя', max_length=150)
+    last_name = models.CharField('Фамилия', max_length=150)
 
     REQUIRED_FIELDS = ('username', 'first_name', 'last_name')
     USERNAME_FIELD = 'email'

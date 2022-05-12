@@ -3,14 +3,13 @@ from django.db import models
 
 
 class Tag(models.Model):
-    name = models.CharField(
-        'Название', max_length=200, unique=True, blank=False, null=False)
+    name = models.CharField('Название', max_length=200, unique=True)
     color = models.CharField(
         'Цвет', validators=[RegexValidator(
             regex=r'^#[\dABCDEF]{6}$', message=('цвет задается НЕХ кодом'))],
-        max_length=7, blank=False, null=False)
+        max_length=7)
     slug = models.SlugField(
-        'Slug', unique=True, max_length=200, blank=False, null=False)
+        'Slug', unique=True, max_length=200)
 
     class Meta:
         ordering = ('-id',)

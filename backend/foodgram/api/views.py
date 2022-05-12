@@ -1,5 +1,6 @@
 from os.path import abspath, dirname, join
 
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from fpdf import FPDF
@@ -11,10 +12,10 @@ from rest_framework.response import Response
 from ingredients.models import Ingredient
 from recipes.models import Cart, Favorite, IngredientAmount, Recipe
 from tags.models import Tag
-from users.serializers import RecipeSerializerShort
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsOwnerOrReadOnly
-from .serializers import IngredientSerializer, RecipeSerializer, TagSerializer
+from .serializers import (IngredientSerializer, RecipeSerializer,
+                          RecipeSerializerShort, TagSerializer)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -68,6 +69,35 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def shopping_cart(self, request, pk=None):
         return self.add_or_delete(request, Cart, pk)
 
+    # @action(detail=False, methods=('get',),
+    #         permission_classes=(IsAuthenticated,))
+    # def download_shopping_cart(self, request):
+    #     pdf = FPDF()
+    #     pdf.add_page()
+    #     pdf.add_font(
+    #         'DejaVuSans-Oblique',
+    #         fname=join(dirname(abspath(__file__)), 'DejaVuSans-Oblique.ttf'))
+    #     pdf.set_font('DejaVuSans-Oblique', size=25)
+    #     ingredients = IngredientAmount.objects.filter(
+    #         recipe__cart__user=request.user).values_list(
+    #         'ingredient__name', 'ingredient__measurement_unit__name',
+    #         'amount')
+    #     cart_dict = {}
+    #     for ingredient in ingredients:
+    #         if ingredient[:2] in cart_dict:
+    #             cart_dict[ingredient[:2]] += ingredient[2]
+    #         else:
+    #             cart_dict[ingredient[:2]] = ingredient[2]
+    #     for n, (ingredient, amount) in enumerate(cart_dict.items(), start=1):
+    #         pdf.cell(
+    #             0, 10, f'{n}. {ingredient[0]} {amount} {ingredient[1]}',
+    #             new_x='LMARGIN', new_y='NEXT')
+    #     response = HttpResponse(
+    #         bytes(pdf.output()), content_type='application/pdf')
+    #     response['Content-Disposition'] = (
+    #         'attachment; filename="shopping_cart.pdf"')
+    #     return response
+
     @action(detail=False, methods=('get',),
             permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
@@ -78,19 +108,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
             fname=join(dirname(abspath(__file__)), 'DejaVuSans-Oblique.ttf'))
         pdf.set_font('DejaVuSans-Oblique', size=25)
         ingredients = IngredientAmount.objects.filter(
-            recipe__cart__user=request.user).values_list(
-            'ingredient__name', 'ingredient__measurement_unit__name',
-            'amount')
-        cart_dict = {}
-        for ingredient in ingredients:
-            if ingredient[:2] in cart_dict:
-                cart_dict[ingredient[:2]] += ingredient[2]
-            else:
-                cart_dict[ingredient[:2]] = ingredient[2]
-        for n, (ingredient, amount) in enumerate(cart_dict.items(), start=1):
+            recipe__cart__user=request.user.id).values(
+                'ingredient__name',
+                'ingredient__measurement_unit').annotate(amount=Sum('amount'))
+        for n, ingredient in enumerate(ingredients, start=1):
             pdf.cell(
-                0, 10, f'{n}. {ingredient[0]} {amount} {ingredient[1]}',
-                new_x="LMARGIN", new_y="NEXT")
+                0, 10,
+                f'{n}. {ingredient["ingredient__name"]} '
+                f'{ingredient["amount"]} {"ingredient__measurement_unit"}',
+                new_x='LMARGIN', new_y='NEXT')
         response = HttpResponse(
             bytes(pdf.output()), content_type='application/pdf')
         response['Content-Disposition'] = (

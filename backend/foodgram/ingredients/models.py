@@ -2,14 +2,9 @@ from django.db import models
 
 
 class Measure(models.Model):
-    name = models.CharField(
-        'Название', max_length=200, unique=True, blank=False, null=False)
+    name = models.CharField('Название', max_length=200, unique=True)
 
     class Meta:
-        constraints = (
-            models.UniqueConstraint(
-                fields=['name'],
-                name='unique_measure'),)
         ordering = ('-id',)
         verbose_name = 'Единица измерения'
         verbose_name_plural = 'Единицы измерения'
@@ -19,8 +14,7 @@ class Measure(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(
-        'Название', max_length=200, unique=False, blank=False, null=False)
+    name = models.CharField('Название', max_length=200)
     measurement_unit = models.ForeignKey(
         Measure, on_delete=models.CASCADE, related_name='ingredients',
         verbose_name='Единица измерения', db_index=True)

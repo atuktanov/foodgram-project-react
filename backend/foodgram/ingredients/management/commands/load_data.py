@@ -26,10 +26,10 @@ class Command(BaseCommand):
                 for n, ingredient in enumerate(data):
                     try:
                         measure, _ = Measure.objects.get_or_create(
-                            name=ingredient["measurement_unit"])
+                            name=ingredient['measurement_unit'])
                         try:
                             Ingredient.objects.update_or_create(
-                                name=ingredient["name"],
+                                name=ingredient['name'],
                                 measurement_unit=measure)
                         except IntegrityError:
                             print('Ошибка добавления ингредиента')

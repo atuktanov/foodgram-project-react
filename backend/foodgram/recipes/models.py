@@ -12,7 +12,7 @@ class Recipe(models.Model):
         User, on_delete=models.CASCADE, related_name='recipes',
         verbose_name='Автор')
     ingredients = models.ManyToManyField(
-        Ingredient, through='IngredientAmount', verbose_name='Ингридиенты',
+        Ingredient, through='IngredientAmount', verbose_name='Ингредиенты',
         related_name='recipes')
     name = models.CharField('Название', max_length=200)
     image = models.ImageField('Картинка', upload_to='recipes/')
@@ -33,18 +33,18 @@ class Recipe(models.Model):
 
 class IngredientAmount(models.Model):
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, verbose_name='Ингридиент')
+        Ingredient, on_delete=models.CASCADE, verbose_name='Ингредиент')
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE, verbose_name='Рецепт')
     amount = models.PositiveSmallIntegerField(
         'Количество', validators=(
             validators.MinValueValidator(
-                1, message='Минимальное количество ингридиента 1'),))
+                1, message='Минимальное количество ингредиента 1'),))
 
     class Meta:
         ordering = ('-id',)
-        verbose_name = 'Количество ингридиента'
-        verbose_name_plural = 'Количество ингридиента'
+        verbose_name = 'Количество ингредиента'
+        verbose_name_plural = 'Количество ингредиента'
         constraints = (
             models.UniqueConstraint(
                 fields=('ingredient', 'recipe'), name='unique_ingredients'),)

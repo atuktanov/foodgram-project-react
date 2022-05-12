@@ -12,7 +12,7 @@ class IngredientFilter(SearchFilter):
 
 class RecipeFilter(FilterSet):
     tags = filters.ModelMultipleChoiceFilter(
-        field_name="tags__slug", to_field_name='slug',
+        field_name='tags__slug', to_field_name='slug',
         queryset=Tag.objects.all())
     author = filters.ModelChoiceFilter(queryset=User.objects.all())
     is_favorited = filters.BooleanFilter(method='filter_is_favorited')
