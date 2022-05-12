@@ -110,7 +110,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ingredients = IngredientAmount.objects.filter(
             recipe__cart__user=request.user.id).values(
                 'ingredient__name',
-                'ingredient__measurement_unit__name').annotate(amount=Sum('amount'))
+                'ingredient__measurement_unit__name').annotate(
+                    amount=Sum('amount'))
         for n, ingredient in enumerate(ingredients, start=1):
             pdf.cell(
                 0, 10,
