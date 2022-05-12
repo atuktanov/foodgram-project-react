@@ -72,7 +72,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
     def validate(self, data):
-        ingredients = self.data.get('ingredients')
+        ingredients = data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError({
                 'ingredients': 'Нельзя создать рецепт без ингредиентов'})
@@ -101,14 +101,14 @@ class RecipeSerializer(serializers.ModelSerializer):
         image = validated_data.pop('image')
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(image=image, **validated_data)
-        tags = self.data.get('tags')
+        tags = validated_data.pop('tags')
         recipe.tags.set(tags)
         self.add_ingredients(ingredients, recipe)
         return recipe
 
     def update(self, instance, validated_data):
         instance.tags.clear()
-        tags_data = self.data.get('tags')
+        tags_data = validated_data.get('tags')
         instance.tags.set(tags_data)
         IngredientAmount.objects.filter(recipe=instance).delete()
         self.add_ingredients(validated_data.get('ingredients'), instance)
