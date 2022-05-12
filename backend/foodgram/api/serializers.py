@@ -72,6 +72,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
     def validate_ingredients(self, value):
+        import logging
+        logging.error(value)
         ingredients = value
         if not ingredients:
             raise serializers.ValidationError({
