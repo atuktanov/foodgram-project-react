@@ -116,7 +116,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             pdf.cell(
                 0, 10,
                 f'{n}. {ingredient["ingredient__name"]} '
-                f'{ingredient["amount"]} {"ingredient__measurement_unit"}',
+                f'{ingredient["amount"]} '
+                f'{"ingredient__measurement_unit__name"}',
                 new_x='LMARGIN', new_y='NEXT')
         response = HttpResponse(
             bytes(pdf.output()), content_type='application/pdf')
