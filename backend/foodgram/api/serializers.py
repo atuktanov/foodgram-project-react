@@ -101,8 +101,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         image = validated_data.pop('image')
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(image=image, **validated_data)
-        # tags = self.initial_data.get('tags')
-        tags = validated_data.pop('tags')
+        tags = self.initial_data.get('tags')
+        # tags = validated_data.pop('tags')
         recipe.tags.set(tags)
         self.add_ingredients(ingredients, recipe)
         return recipe
