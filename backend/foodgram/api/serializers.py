@@ -75,7 +75,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         ingredients = data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError({
-                'ingredients': 'Нельзя создать рецепт без ингредиентов' + data})
+                'ingredients': 'Нельзя создать рецепт без ингредиентов'
+                + data})
         ingredient_list = []
         for ingredient_item in ingredients:
             ingredient = get_object_or_404(
