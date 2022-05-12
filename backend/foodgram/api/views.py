@@ -69,35 +69,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def shopping_cart(self, request, pk=None):
         return self.add_or_delete(request, Cart, pk)
 
-    # @action(detail=False, methods=('get',),
-    #         permission_classes=(IsAuthenticated,))
-    # def download_shopping_cart(self, request):
-    #     pdf = FPDF()
-    #     pdf.add_page()
-    #     pdf.add_font(
-    #         'DejaVuSans-Oblique',
-    #         fname=join(dirname(abspath(__file__)), 'DejaVuSans-Oblique.ttf'))
-    #     pdf.set_font('DejaVuSans-Oblique', size=25)
-    #     ingredients = IngredientAmount.objects.filter(
-    #         recipe__cart__user=request.user).values_list(
-    #         'ingredient__name', 'ingredient__measurement_unit__name',
-    #         'amount')
-    #     cart_dict = {}
-    #     for ingredient in ingredients:
-    #         if ingredient[:2] in cart_dict:
-    #             cart_dict[ingredient[:2]] += ingredient[2]
-    #         else:
-    #             cart_dict[ingredient[:2]] = ingredient[2]
-    #     for n, (ingredient, amount) in enumerate(cart_dict.items(), start=1):
-    #         pdf.cell(
-    #             0, 10, f'{n}. {ingredient[0]} {amount} {ingredient[1]}',
-    #             new_x='LMARGIN', new_y='NEXT')
-    #     response = HttpResponse(
-    #         bytes(pdf.output()), content_type='application/pdf')
-    #     response['Content-Disposition'] = (
-    #         'attachment; filename="shopping_cart.pdf"')
-    #     return response
-
     @action(detail=False, methods=('get',),
             permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
@@ -111,7 +82,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             recipe__cart__user=request.user.id).values(
                 'ingredient__name',
                 'ingredient__measurement_unit__name').order_by(
-                    'ingredient__name').annotate(
+                    'ingredient__name',
+                    'ingredient__measurement_unit__name').annotate(
                     amount=Sum('amount'))
         for n, ingredient in enumerate(ingredients, start=1):
             pdf.cell(
