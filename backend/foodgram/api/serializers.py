@@ -72,11 +72,10 @@ class RecipeSerializer(serializers.ModelSerializer):
         return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
     def validate(self, data):
-        ingredients = data.get('ingredients')
+        ingredients = data['ingredients']
         if not ingredients:
             raise serializers.ValidationError({
-                'ingredients': 'Нельзя создать рецепт без ингредиентов'
-                + data})
+                'ingredients': 'Нельзя создать рецепт без ингредиентов'})
         ingredient_list = []
         for ingredient_item in ingredients:
             ingredient = get_object_or_404(
