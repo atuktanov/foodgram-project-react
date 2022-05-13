@@ -54,7 +54,10 @@ class AddIngredientSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
-    tags = TagSerializer(read_only=True, many=True)
+    # tags = TagSerializer(read_only=True, many=True)
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(),
+        many=True)
     author = UserSerializer(read_only=True)
     ingredients = AddIngredientSerializer(
         source='ingredientamount_set', many=True)
@@ -68,6 +71,9 @@ class RecipeSerializer(serializers.ModelSerializer):
             'cooking_time')
 
     def validate(self, data):
+        import logging
+
+        logging.error(data.pop('tags'))
         ingredients = data.pop('ingredientamount_set')
         if not ingredients:
             raise serializers.ValidationError({
@@ -104,8 +110,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, instance, validated_data):
-        import logging
-
         instance.image = validated_data.get('image', instance.image)
         instance.name = validated_data.get('name', instance.name)
         instance.text = validated_data.get('text', instance.text)
@@ -113,7 +117,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             'cooking_time', instance.cooking_time)
         instance.tags.clear()
         tags_data = self.initial_data.get('tags')
-        logging.error(tags_data)
         instance.tags.set(tags_data)
         IngredientAmount.objects.filter(recipe=instance).all().delete()
         self.add_ingredients(validated_data.get('ingredients'), instance)
