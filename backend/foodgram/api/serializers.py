@@ -68,6 +68,8 @@ class RecipeSerializer(serializers.ModelSerializer):
             'cooking_time')
 
     def validate(self, data):
+        import logging
+        logging.error(data)
         ingredients = self.initial_data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError({
