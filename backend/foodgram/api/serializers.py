@@ -86,7 +86,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         ingredient_list = []
         for ingredient_item in ingredients:
             ingredient = get_object_or_404(
-                Ingredient, id=ingredient_item['id'])
+                Ingredient, id=ingredient_item['ingredient']['id'])
             if ingredient in ingredient_list:
                 raise serializers.ValidationError(
                     'Нельзя дублировать ингредиенты')
@@ -101,8 +101,8 @@ class RecipeSerializer(serializers.ModelSerializer):
     def add_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
             IngredientAmount.objects.create(
-                recipe=recipe, ingredient_id=ingredient.get('id'),
-                amount=ingredient.get('amount'))
+                recipe=recipe, ingredient_id=ingredient['ingredient']['id'],
+                amount=ingredient['amount'])
 
     def create(self, validated_data):
         image = validated_data.pop('image')
