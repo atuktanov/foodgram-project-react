@@ -71,7 +71,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         import logging
         logging.error(data)
         logging.error(data.get('ingredientamount_set'))
-        logging.error(self.initial_data.pop('ingredients')) # !!!!
+        logging.error(self.initial_data.pop('ingredients'))  # !!!!
         ingredients = self.initial_data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError({
