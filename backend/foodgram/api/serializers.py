@@ -69,6 +69,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         import logging
+
         # logging.error(data)
         # logging.error(self.initial_data.get('ingredients'))
         logging.error(data.get('ingredientamount_set'))  # !!!!
