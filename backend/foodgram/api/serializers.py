@@ -54,7 +54,8 @@ class AddIngredientSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
-    tags = TagSerializer(write_only=True, many=True)
+    # tags = TagSerializer(write_only=True, many=True)
+    tags = serializers.ListField(write_only=True)
     # tags = serializers.PrimaryKeyRelatedField(
     #     queryset=Tag.objects.all(),
     #     many=True)
