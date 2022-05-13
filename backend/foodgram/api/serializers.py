@@ -75,6 +75,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         logging.error(data)  # !
         logging.error(data.get('ingredientamount_set'))
         logging.error(data.get('ingredientamount_set')[0])
+        logging.error(data.get('ingredientamount_set')[0]['ingredient']['id'])
+        logging.error(data.get('ingredientamount_set')[0]['amount'])
         # ingredients = self.initial_data.get('ingredients')
         logging.error(self.initial_data.get('ingredients'))
         ingredients = data.pop('ingredientamount_set')
