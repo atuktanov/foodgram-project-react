@@ -45,7 +45,7 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
 
 
 class AddIngredientSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='ingredient.id')
+    id = serializers.IntegerField()
     # id = serializers.PrimaryKeyRelatedField(
     # queryset=Ingredient.objects.all())
     # amount = serializers.IntegerField()
