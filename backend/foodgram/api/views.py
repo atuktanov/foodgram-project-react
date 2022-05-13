@@ -35,7 +35,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    # serializer_class = RecipeSerializer
     filter_class = RecipeFilter
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -43,7 +42,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     def get_serializer_class(self):
-        # if self.action in ('list', 'retrieve'):
         if self.request.method == 'GET':
             return RecipeSerializerGet
         return RecipeSerializer

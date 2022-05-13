@@ -49,31 +49,15 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(read_only=True, many=True)
     author = UserSerializer(read_only=True)
     ingredients = IngredientAmountSerializer(
-        source='ingredientamount_set', read_only=True, many=True)
-    # is_favorited = serializers.SerializerMethodField()
-    # is_in_shopping_cart = serializers.SerializerMethodField()
+        source='ingredientamount_set', many=True)
+    # ingredients = IngredientAmountSerializer(
+    #     source='ingredientamount_set', read_only=True, many=True)
 
     class Meta:
         model = Recipe
-        # fields = (
-        #     'id', 'tags', 'author', 'ingredients', 'is_favorited',
-        #     'is_in_shopping_cart', 'name', 'image', 'text', 'cooking_time')
         fields = (
             'id', 'tags', 'author', 'ingredients', 'name', 'image', 'text',
             'cooking_time')
-
-    # def get_is_favorited(self, obj):
-    #     user = self.context.get('request').user
-    #     if user.is_anonymous:
-    #         return False
-    #     return Recipe.objects.filter(favorites__user=user, id=obj.id).
-    # exists()
-
-    # def get_is_in_shopping_cart(self, obj):
-    #     user = self.context.get('request').user
-    #     if user.is_anonymous:
-    #         return False
-    #     return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
