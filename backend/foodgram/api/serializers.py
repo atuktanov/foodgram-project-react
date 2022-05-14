@@ -59,8 +59,6 @@ class RecipeSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     ingredients = IngredientAmountSerializerRecipe(
         source='ingredientamount_set', many=True)
-    ingredients = serializers.ListField(
-        child=IngredientAmountSerializer(), write_only=True)
 
     class Meta:
         model = Recipe
