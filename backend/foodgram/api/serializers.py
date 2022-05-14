@@ -100,10 +100,11 @@ class RecipeSerializer(serializers.ModelSerializer):
                 amount=ingredient['amount'])
 
     def create(self, validated_data):
-        image = validated_data.pop('image')
+        # image = validated_data.pop('image')
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
-        recipe = Recipe.objects.create(image=image, **validated_data)
+        # recipe = Recipe.objects.create(image=image, **validated_data)
+        recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
         self.add_ingredients(ingredients, recipe)
         return recipe
