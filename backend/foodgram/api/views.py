@@ -17,7 +17,7 @@ from users.models import Subscription, User
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (IngredientSerializer, RecipeSerializer,
-                          RecipeSerializerGet, RecipeSerializerShort,
+                          RecipeSerializerShort,
                           SubscriptionSerializer, TagSerializer)
 
 
@@ -39,14 +39,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filter_class = RecipeFilter
     permission_classes = (IsOwnerOrReadOnly,)
+    serializer_class = RecipeSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return RecipeSerializerGet
-        return RecipeSerializer
 
     def add_or_delete(self, request, model, id):
         if request.method == 'DELETE':
