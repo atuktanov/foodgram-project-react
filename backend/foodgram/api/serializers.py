@@ -46,7 +46,9 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
-    tags = serializers.ListField(write_only=True)
+    # tags = serializers.ListField(write_only=True)
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(), many=True)
     author = UserSerializer(read_only=True)
     ingredients = serializers.ListField(write_only=True)
 
@@ -100,10 +102,10 @@ class RecipeSerializer(serializers.ModelSerializer):
                 amount=ingredient['amount'])
 
     def create(self, validated_data):
-        # image = validated_data.pop('image')
+        import logging
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
-        # recipe = Recipe.objects.create(image=image, **validated_data)
+        logging.error(tags)
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
         self.add_ingredients(ingredients, recipe)
