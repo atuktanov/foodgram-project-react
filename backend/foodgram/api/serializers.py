@@ -46,11 +46,11 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
-    # tags = serializers.ListField(write_only=True)
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(), many=True)
     author = UserSerializer(read_only=True)
-    ingredients = serializers.ListField(write_only=True)
+    ingredients = serializers.ListField(
+        child=IngredientAmountSerializer(), write_only=True)
 
     class Meta:
         model = Recipe
@@ -104,10 +104,10 @@ class RecipeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # import logging
         ingredients = validated_data.pop('ingredients')
-        # tags = validated_data.pop('tags')
+        tags = validated_data.pop('tags')
         # logging.error(tags)
         recipe = Recipe.objects.create(**validated_data)
-        # recipe.tags.set(tags)
+        recipe.tags.set(tags)
         self.add_ingredients(ingredients, recipe)
         return recipe
 
