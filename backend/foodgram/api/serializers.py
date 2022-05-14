@@ -77,30 +77,40 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def add_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            IngredientAmount.objects.create(
+            IngredientAmount.objects.update_or_create(
                 recipe=recipe, ingredient_id=ingredient['id'],
                 amount=ingredient['amount'])
 
     def create(self, validated_data):
         image = validated_data.pop('image')
         ingredients = validated_data.pop('ingredients')
-        recipe = Recipe.objects.create(image=image, **validated_data)
         tags = validated_data.pop('tags')
+        recipe = Recipe.objects.create(image=image, **validated_data)
         recipe.tags.set(tags)
         self.add_ingredients(ingredients, recipe)
         return recipe
 
+    # def update(self, instance, validated_data):
+    #     instance.image = validated_data.get('image', instance.image)
+    #     instance.name = validated_data.get('name', instance.name)
+    #     instance.text = validated_data.get('text', instance.text)
+    #     instance.cooking_time = validated_data.get(
+    #         'cooking_time', instance.cooking_time)
+    #     instance.tags.clear()
+    #     tags_data = validated_data.pop('tags')
+    #     instance.tags.set(tags_data)
+    #     IngredientAmount.objects.filter(recipe=instance).all().delete()
+    #     self.add_ingredients(validated_data.get('ingredients'), instance)
+    #     instance.save()
+    #     return instance
+
     def update(self, instance, validated_data):
-        instance.image = validated_data.get('image', instance.image)
-        instance.name = validated_data.get('name', instance.name)
-        instance.text = validated_data.get('text', instance.text)
-        instance.cooking_time = validated_data.get(
-            'cooking_time', instance.cooking_time)
-        instance.tags.clear()
-        tags_data = validated_data.pop('tags')
-        instance.tags.set(tags_data)
-        IngredientAmount.objects.filter(recipe=instance).all().delete()
-        self.add_ingredients(validated_data.get('ingredients'), instance)
+        # tags_data = validated_data.pop('tags')
+        ingredients_data = validated_data.pop('ingredients')
+        super().update(instance, validated_data)
+        # instance.tags.clear()
+        # instance.tags.set(tags_data)
+        self.add_ingredients(ingredients_data, instance)
         instance.save()
         return instance
 
