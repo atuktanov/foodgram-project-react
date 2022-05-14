@@ -17,8 +17,8 @@ from users.models import Subscription, User
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (IngredientSerializer, RecipeSerializer,
-                          RecipeSerializerShort,
-                          SubscriptionSerializer, TagSerializer)
+                          RecipeSerializerShort, SubscriptionSerializer,
+                          TagSerializer)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
