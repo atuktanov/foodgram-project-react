@@ -66,25 +66,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             'id', 'tags', 'author', 'ingredients', 'name', 'image', 'text',
             'cooking_time')
 
-    # def validate(self, data):
-    #     ingredients = data.get('ingredients')
-    #     if not ingredients:
-    #         raise serializers.ValidationError({
-    #             'ingredients': 'Нельзя создать рецепт без ингредиентов'})
-    #     ingredient_list = []
-    #     for ingredient_item in ingredients:
-    #         ingredient = get_object_or_404(
-    #             Ingredient, id=ingredient_item['id'])
-    #         if ingredient in ingredient_list:
-    #             raise serializers.ValidationError(
-    #                 'Нельзя дублировать ингредиенты')
-    #         ingredient_list.append(ingredient)
-    #         if int(ingredient_item['amount']) <= 0:
-    #             raise serializers.ValidationError(
-    #                 {'ingredients': (
-    #                     'Количество ингредиента должно быть больше 0')})
-    #     return data
-
     def validate_ingredients(self, value):
         if not value:
             raise serializers.ValidationError({
@@ -110,8 +91,6 @@ class RecipeSerializer(serializers.ModelSerializer):
                 amount=ingredient['amount'])
 
     def create(self, validated_data):
-        import logging
-        logging.error(validated_data)
         ingredients = validated_data.pop('ingredientamount_set')
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
@@ -119,26 +98,11 @@ class RecipeSerializer(serializers.ModelSerializer):
         self.add_ingredients(ingredients, recipe)
         return recipe
 
-    # def update(self, instance, validated_data):
-    #     instance.image = validated_data.get('image', instance.image)
-    #     instance.name = validated_data.get('name', instance.name)
-    #     instance.text = validated_data.get('text', instance.text)
-    #     instance.cooking_time = validated_data.get(
-    #         'cooking_time', instance.cooking_time)
-    #     instance.tags.clear()
-    #     tags_data = validated_data.pop('tags')
-    #     instance.tags.set(tags_data)
-    #     IngredientAmount.objects.filter(recipe=instance).all().delete()
-    #     self.add_ingredients(validated_data.get('ingredients'), instance)
-    #     instance.save()
-    #     return instance
-
     def update(self, instance, validated_data):
         ingredients_data = validated_data.pop('ingredientamount_set')
         super().update(instance, validated_data)
         IngredientAmount.objects.filter(recipe=instance).all().delete()
         self.add_ingredients(ingredients_data, instance)
-        # instance.save()
         return instance
 
 
