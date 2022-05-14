@@ -60,8 +60,10 @@ class RecipeSerializer(serializers.ModelSerializer):
     #     queryset=Tag.objects.all(),
     #     many=True)
     author = UserSerializer(read_only=True)
-    ingredients = AddIngredientSerializer(
-        source='ingredientamount_set', many=True)
+    # DictField
+    ingredients = serializers.ListField()
+    # AddIngredientSerializer(
+    #    source='ingredientamount_set', many=True)
     # ingredients = IngredientAmountSerializer(
     #     source='ingredientamount_set', read_only=True, many=True)
 
@@ -75,14 +77,14 @@ class RecipeSerializer(serializers.ModelSerializer):
         # import logging
 
         # logging.error(data.pop('tags'))
-        ingredients = data.pop('ingredientamount_set')
+        ingredients = data.get('ingredientamount_set')
         if not ingredients:
             raise serializers.ValidationError({
                 'ingredients': 'Нельзя создать рецепт без ингредиентов'})
         ingredient_list = []
         for ingredient_item in ingredients:
             ingredient = get_object_or_404(
-                Ingredient, id=ingredient_item['ingredient']['id'])
+                Ingredient, id=ingredient_item['id'])
             if ingredient in ingredient_list:
                 raise serializers.ValidationError(
                     'Нельзя дублировать ингредиенты')
@@ -91,13 +93,12 @@ class RecipeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {'ingredients': (
                         'Количество ингредиента должно быть больше 0')})
-        data['ingredients'] = ingredients
         return data
 
     def add_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
             IngredientAmount.objects.create(
-                recipe=recipe, ingredient_id=ingredient['ingredient']['id'],
+                recipe=recipe, ingredient_id=ingredient['id'],
                 amount=ingredient['amount'])
 
     def create(self, validated_data):
