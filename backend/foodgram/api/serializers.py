@@ -77,7 +77,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         # import logging
 
         # logging.error(data.pop('tags'))
-        ingredients = data.get('ingredientamount_set')
+        # ingredients = data.get('ingredientamount_set')
+        ingredients = data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError({
                 'ingredients': 'Нельзя создать рецепт без ингредиентов'})
