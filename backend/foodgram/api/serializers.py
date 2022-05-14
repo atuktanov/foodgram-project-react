@@ -44,11 +44,21 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
                 fields=['ingredient', 'recipe']),)
 
 
+class IngredientAmountSerializerRecipe(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='ingredient.id')
+
+    class Meta:
+        model = IngredientAmount
+        fields = ('id', 'amount')
+
+
 class RecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(), many=True)
     author = UserSerializer(read_only=True)
+    ingredients = IngredientAmountSerializerRecipe(
+        source='ingredientamount_set', many=True)
     ingredients = serializers.ListField(
         child=IngredientAmountSerializer(), write_only=True)
 
@@ -84,7 +94,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         ingredient_list = []
         for ingredient_item in value:
             ingredient = get_object_or_404(
-                Ingredient, id=ingredient_item['id'])
+                Ingredient, id=ingredient_item['ingredient']['id'])
             if ingredient in ingredient_list:
                 raise serializers.ValidationError(
                     'Нельзя дублировать ингредиенты')
@@ -98,7 +108,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     def add_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
             IngredientAmount.objects.create(
-                recipe=recipe, ingredient_id=ingredient['id'],
+                recipe=recipe, ingredient_id=ingredient['ingredient']['id'],
                 amount=ingredient['amount'])
 
     def create(self, validated_data):
