@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from djoser.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
@@ -7,8 +8,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from ingredients.models import Ingredient
 from recipes.models import IngredientAmount, Recipe
 from tags.models import Tag
-from users.models import Subscription
-from users.serializers import UserSerializer
+from users.models import Subscription, User
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -172,3 +172,19 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj.author).count()
+
+
+class UserSerializer(UserSerializer):
+    is_subscribed = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            'email', 'id', 'username', 'first_name', 'last_name',
+            'is_subscribed')
+
+    def get_is_subscribed(self, obj):
+        user = self.context.get('request').user
+        return (
+            user.is_authenticated
+            and user.authors.filter(author=obj).exists())
