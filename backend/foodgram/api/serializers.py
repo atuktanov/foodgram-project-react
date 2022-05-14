@@ -44,28 +44,11 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
                 fields=['ingredient', 'recipe']),)
 
 
-class AddIngredientSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='ingredient.id')
-
-    class Meta:
-        model = IngredientAmount
-        fields = ('id', 'amount')
-
-
 class RecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
-    # tags = TagSerializer(write_only=True, many=True)
     tags = serializers.ListField(write_only=True)
-    # tags = serializers.PrimaryKeyRelatedField(
-    #     queryset=Tag.objects.all(),
-    #     many=True)
     author = UserSerializer(read_only=True)
-    # DictField
     ingredients = serializers.ListField(write_only=True)
-    # AddIngredientSerializer(
-    #    source='ingredientamount_set', many=True)
-    # ingredients = IngredientAmountSerializer(
-    #     source='ingredientamount_set', read_only=True, many=True)
 
     class Meta:
         model = Recipe
@@ -74,10 +57,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             'cooking_time')
 
     def validate(self, data):
-        # import logging
-
-        # logging.error(data.pop('ingredients'))
-        # ingredients = data.get('ingredientamount_set')
         ingredients = data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError({
@@ -106,7 +85,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         image = validated_data.pop('image')
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(image=image, **validated_data)
-        # tags = self.initial_data.get('tags')
         tags = validated_data.pop('tags')
         recipe.tags.set(tags)
         self.add_ingredients(ingredients, recipe)
@@ -119,7 +97,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.cooking_time = validated_data.get(
             'cooking_time', instance.cooking_time)
         instance.tags.clear()
-        # tags_data = self.initial_data.get('tags')
         tags_data = validated_data.pop('tags')
         instance.tags.set(tags_data)
         IngredientAmount.objects.filter(recipe=instance).all().delete()
