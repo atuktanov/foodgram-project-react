@@ -3,8 +3,8 @@ from djoser.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
-from rest_framework.validators import UniqueTogetherValidator
 
+# from rest_framework.validators import UniqueTogetherValidator
 from ingredients.models import Ingredient
 from recipes.models import IngredientAmount, Recipe
 from tags.models import Tag
@@ -39,10 +39,10 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
     class Meta:
         model = IngredientAmount
         fields = ('id', 'name', 'measurement_unit', 'amount')
-        validators = (
-            UniqueTogetherValidator(
-                queryset=IngredientAmount.objects.all(),
-                fields=['ingredient', 'recipe']),)
+        # validators = (
+        #     UniqueTogetherValidator(
+        #         queryset=IngredientAmount.objects.all(),
+        #         fields=['ingredient', 'recipe']),)
 
 
 class IngredientAmountSerializerRecipe(serializers.ModelSerializer):
