@@ -61,7 +61,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     #     many=True)
     author = UserSerializer(read_only=True)
     # DictField
-    ingredients = serializers.ListField()
+    ingredients = serializers.ListField(write_only=True)
     # AddIngredientSerializer(
     #    source='ingredientamount_set', many=True)
     # ingredients = IngredientAmountSerializer(
@@ -76,7 +76,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     def validate(self, data):
         # import logging
 
-        # logging.error(data.pop('tags'))
+        # logging.error(data.pop('ingredients'))
         # ingredients = data.get('ingredientamount_set')
         ingredients = data.get('ingredients')
         if not ingredients:
