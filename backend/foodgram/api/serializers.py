@@ -56,13 +56,31 @@ class RecipeSerializer(serializers.ModelSerializer):
             'id', 'tags', 'author', 'ingredients', 'name', 'image', 'text',
             'cooking_time')
 
-    def validate(self, data):
-        ingredients = data.get('ingredients')
-        if not ingredients:
+    # def validate(self, data):
+    #     ingredients = data.get('ingredients')
+    #     if not ingredients:
+    #         raise serializers.ValidationError({
+    #             'ingredients': 'Нельзя создать рецепт без ингредиентов'})
+    #     ingredient_list = []
+    #     for ingredient_item in ingredients:
+    #         ingredient = get_object_or_404(
+    #             Ingredient, id=ingredient_item['id'])
+    #         if ingredient in ingredient_list:
+    #             raise serializers.ValidationError(
+    #                 'Нельзя дублировать ингредиенты')
+    #         ingredient_list.append(ingredient)
+    #         if int(ingredient_item['amount']) <= 0:
+    #             raise serializers.ValidationError(
+    #                 {'ingredients': (
+    #                     'Количество ингредиента должно быть больше 0')})
+    #     return data
+
+    def validate_ingredients(self, value):
+        if not value:
             raise serializers.ValidationError({
                 'ingredients': 'Нельзя создать рецепт без ингредиентов'})
         ingredient_list = []
-        for ingredient_item in ingredients:
+        for ingredient_item in value:
             ingredient = get_object_or_404(
                 Ingredient, id=ingredient_item['id'])
             if ingredient in ingredient_list:
@@ -73,7 +91,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {'ingredients': (
                         'Количество ингредиента должно быть больше 0')})
-        return data
+        return value
 
     def add_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
