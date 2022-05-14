@@ -77,7 +77,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def add_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            IngredientAmount.objects.update_or_create(
+            IngredientAmount.objects.create(
                 recipe=recipe, ingredient_id=ingredient['id'],
                 amount=ingredient['amount'])
 
@@ -105,13 +105,11 @@ class RecipeSerializer(serializers.ModelSerializer):
     #     return instance
 
     def update(self, instance, validated_data):
-        # tags_data = validated_data.pop('tags')
         ingredients_data = validated_data.pop('ingredients')
         super().update(instance, validated_data)
-        # instance.tags.clear()
-        # instance.tags.set(tags_data)
+        IngredientAmount.objects.filter(recipe=instance).all().delete()
         self.add_ingredients(ingredients_data, instance)
-        instance.save()
+        # instance.save()
         return instance
 
 
