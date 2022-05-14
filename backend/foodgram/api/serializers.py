@@ -4,7 +4,6 @@ from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 
-# from rest_framework.validators import UniqueTogetherValidator
 from ingredients.models import Ingredient
 from recipes.models import IngredientAmount, Recipe
 from tags.models import Tag
@@ -30,7 +29,6 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
-    # id = serializers.ReadOnlyField(source='ingredient.id')
     id = serializers.IntegerField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
@@ -39,18 +37,6 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
     class Meta:
         model = IngredientAmount
         fields = ('id', 'name', 'measurement_unit', 'amount')
-        # validators = (
-        #     UniqueTogetherValidator(
-        #         queryset=IngredientAmount.objects.all(),
-        #         fields=['ingredient', 'recipe']),)
-
-
-class IngredientAmountSerializerRecipe(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='ingredient.id')
-
-    class Meta:
-        model = IngredientAmount
-        fields = ('id', 'amount')
 
 
 class RecipeSerializer(serializers.ModelSerializer):
