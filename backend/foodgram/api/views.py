@@ -87,12 +87,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 'ingredient__measurement_unit__name').order_by(
                     'ingredient__name',
                     'ingredient__measurement_unit__name').annotate(
-                    amount=Sum('amount'))
+                    amount_sum=Sum('amount'))
         for n, ingredient in enumerate(ingredients, start=1):
             pdf.cell(
                 0, 10,
                 f'{n}. {ingredient["ingredient__name"]} '
-                f'{ingredient["amount"]} '
+                f'{ingredient["amount_sum"]} '
                 f'{ingredient["ingredient__measurement_unit__name"]}',
                 new_x='LMARGIN', new_y='NEXT')
         response = HttpResponse(
