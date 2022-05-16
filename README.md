@@ -49,4 +49,8 @@ sudo docker-compose exec backend python manage.py load_data
 ```
 Создать через админ зону необходимые теги.
 
-Полсле этого проект будет доступен для пользователей
+После этого проект будет доступен для пользователей
+
+### Авторы:
+[atuktanov](https://github.com/atuktanov) - Backend
+[Яндекс.Практикум](https://github.com/yandex-praktikum/foodgram-project-react) - Frontend
