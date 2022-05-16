@@ -1,7 +1,7 @@
 ![foodgram workflow](https://github.com/atuktanov/foodgram-project-react/workflows/foodgram_workflow/badge.svg)
 # Продуктовый помощник
-Проект запущен по адресу [http://atuktanov.ddns.net/](http://atuktanov.ddns.net/)
-Email: a@a.aa
+Проект запущен по адресу [http://atuktanov.ddns.net/](http://atuktanov.ddns.net/)  
+Email: a@a.aa  
 Password: nkBjF3m5
 ### Описание:
 Сайт (социальная сеть) для публикации кулинарных рецептов, с возможностью подписываться на публикации других авторов, добавлять рецепты в избранное и
@@ -52,5 +52,5 @@ sudo docker-compose exec backend python manage.py load_data
 После этого проект будет доступен для пользователей
 
 ### Авторы:
-[atuktanov](https://github.com/atuktanov) - Backend
+[atuktanov](https://github.com/atuktanov) - Backend  
 [Яндекс.Практикум](https://github.com/yandex-praktikum/foodgram-project-react) - Frontend
