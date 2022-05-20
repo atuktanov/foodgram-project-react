@@ -9,6 +9,13 @@ from users.models import User
 class IngredientFilter(SearchFilter):
     search_param = 'name'
 
+    def filter_queryset(self, request, queryset, view):
+        qs = super().filter_queryset(request, queryset, view)
+        term = self.get_search_terms(request)[0]
+        return (
+            list(qs.filter(name__istartswith=term).order_by('name'))
+            + list(qs.exclude(name__istartswith=term).order_by('name')))
+
 
 class RecipeFilter(FilterSet):
     tags = filters.ModelMultipleChoiceFilter(

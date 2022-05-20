@@ -1,8 +1,6 @@
 ![foodgram workflow](https://github.com/atuktanov/foodgram-project-react/workflows/foodgram_workflow/badge.svg)
 # Продуктовый помощник
-Проект запущен по адресу [http://atuktanov.ddns.net/](http://atuktanov.ddns.net/)  
-Email: a@a.aa  
-Password: nkBjF3m5
+Проект запущен по адресу [http://atuktanov.ddns.net/](http://atuktanov.ddns.net/)
 ### Описание:
 Сайт (социальная сеть) для публикации кулинарных рецептов, с возможностью подписываться на публикации других авторов, добавлять рецепты в избранное и
 список покупок. Список покупок дает возможность скачать список продуктов, необходимых для приготовления добавленных блюд.
