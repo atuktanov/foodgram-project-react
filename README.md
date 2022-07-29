@@ -8,7 +8,7 @@
 Python, Django, Django REST Framework, PostgreSQL, Nginx, Gunicorn, Docker, GitHub Actions, Яндекс.Облако
 
 ### Запуск проекта на собственном сервере:
-На сервере должен быт установлен docker и docker-compose
+На сервере должен быть установлен docker и docker-compose
 
 Скопировать из папки infra в рабочую папку проекта файлы docker-compose.yml и nginx.conf, также скопировать и переименовать файл .env.template в .env (этот файл содержит шаблон заполнения .env) 
 Отредакетировать nginx.conf и .env в соответствии с параметрами своего сервера
