@@ -1,17 +1,32 @@
-![foodgram workflow](https://github.com/atuktanov/foodgram-project-react/workflows/foodgram_workflow/badge.svg)
 # Продуктовый помощник
-### Описание:
+
+
+![foodgram workflow](https://github.com/atuktanov/foodgram-project-react/workflows/foodgram_workflow/badge.svg)
+  
 Сайт (социальная сеть) для публикации кулинарных рецептов, с возможностью подписываться на публикации других авторов, добавлять рецепты в избранное и
 список покупок. Список покупок дает возможность скачать список продуктов, необходимых для приготовления добавленных блюд.
 
-### Стек технологий: 
-Python, Django, Django REST Framework, PostgreSQL, Nginx, Gunicorn, Docker, GitHub Actions, Яндекс.Облако
+## Содержание
+- [Технологии](#технологии)
+- [Использование](#использование)
+- [Над проектом работали](#над-проектом-работали)
 
-### Запуск проекта на собственном сервере:
-На сервере должен быть установлен docker и docker-compose
+## Технологии
+- [Python](https://www.python.org/)
+- [Django](https://www.djangoproject.com/)
+- [Django REST Framework](https://www.django-rest-framework.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Nginx](https://nginx.org/)
+- [Gunicorn](https://gunicorn.org/)
+- [Docker](https://www.docker.com/)
+- [GitHub Actions](https://docs.github.com/en/actions)
+- [Yandex.Cloud](https://cloud.yandex.ru/)
 
-Скопировать из папки infra в рабочую папку проекта файлы docker-compose.yml и nginx.conf, также скопировать и переименовать файл .env.template в .env (этот файл содержит шаблон заполнения .env) 
-Отредакетировать nginx.conf и .env в соответствии с параметрами своего сервера
+## Использование
+На вашем сервере должен быть установлен docker и docker-compose
+  
+Скопируйте из папки infra в рабочую папку проекта файлы docker-compose.yml и nginx.conf, также скопируйте и переименуйте файл .env.template в .env (этот файл содержит шаблон заполнения .env) 
+Отредакетируйте nginx.conf и .env в соответствии с параметрами своего сервера
 
 Пример заполнения .env файла
 ```
@@ -24,30 +39,31 @@ DB_PORT=5432
 SECRET_KEY=j#@2yv698sb@#x=pq4b!^=4ap1!$b7xgpgv3fbpc5@9017!5jx
 ```
 
-Запустить контейнеры
+Запустите контейнеры
 ```
 sudo docker-compose up -d
 ```
-Применить миграции
+Примените миграции
 ```
 sudo docker-compose exec backend python manage.py migrate
 ```
-Cоздать суперпользователя
+Cоздайте суперпользователя
 ```
 sudo docker-compose exec backend python manage.py createsuperuser
 ```
-Cобрать статику
+Cоберите статику
 ```
 sudo docker-compose exec backend python manage.py collectstatic
 ```
-Загрузить в БД данные по ингредиентам
+Загрузите в БД данные по ингредиентам
 ``` 
 sudo docker-compose exec backend python manage.py load_data
 ```
-Создать через админ зону необходимые теги.
+Создайте через админ зону необходимые теги.
 
 После этого проект будет доступен для пользователей
 
-### Авторы:
-[atuktanov](https://github.com/atuktanov) - Backend  
-[Яндекс.Практикум](https://github.com/yandex-praktikum/foodgram-project-react) - Frontend
+## Над проектом работали
+
+- [Алексей Туктанов](https://t.me/atuktanov) - Backend
+- [Яндекс.Практикум](https://github.com/yandex-praktikum/foodgram-project-react) - Frontend
